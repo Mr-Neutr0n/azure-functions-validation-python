@@ -1,6 +1,20 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [0.14.0](https://github.com/yeongseon/azure-functions-validation-python/compare/v0.13.4...v0.14.0) (2026-10-06)
+
+
+### Features
+
+* **python:** require Python 3.11 or newer ([e6cbb8b](https://github.com/yeongseon/azure-functions-validation-python/commit/e6cbb8b7afcd0b7a63a8f2ef7c7b01005ad8819f))
+
+## [0.13.4](https://github.com/yeongseon/azure-functions-validation-python/compare/v0.13.3...v0.13.4) (2026-10-05)
+
+
+### Bug Fixes
+
+* **deps:** align azure-functions floor at 1.21.0 ([#483](https://github.com/yeongseon/azure-functions-validation-python/issues/483)) ([cb5ba52](https://github.com/yeongseon/azure-functions-validation-python/commit/cb5ba525de904f5c5c252a72e3ed8138000401f8))
+
 ## [0.13.3](https://github.com/yeongseon/azure-functions-validation-python/compare/v0.13.2...v0.13.3) (2026-10-03)
 
 

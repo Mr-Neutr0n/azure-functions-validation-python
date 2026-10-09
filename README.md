@@ -4,7 +4,7 @@
 
 [![PyPI](https://img.shields.io/pypi/v/azure-functions-validation.svg)](https://pypi.org/project/azure-functions-validation/)
 [![Downloads](https://static.pepy.tech/badge/azure-functions-validation/month)](https://pepy.tech/project/azure-functions-validation)
-[![Python Version](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13%20%7C%203.14-blue)](https://pypi.org/project/azure-functions-validation/)
+[![Python Version](https://img.shields.io/badge/python-3.11%20%7C%203.12%20%7C%203.13%20%7C%203.14-blue)](https://pypi.org/project/azure-functions-validation/)
 [![CI](https://github.com/yeongseon/azure-functions-validation-python/actions/workflows/ci-test.yml/badge.svg)](https://github.com/yeongseon/azure-functions-validation-python/actions/workflows/ci-test.yml)
 [![Release](https://github.com/yeongseon/azure-functions-validation-python/actions/workflows/publish-pypi.yml/badge.svg)](https://github.com/yeongseon/azure-functions-validation-python/actions/workflows/publish-pypi.yml)
 [![Security Scans](https://github.com/yeongseon/azure-functions-validation-python/actions/workflows/security.yml/badge.svg)](https://github.com/yeongseon/azure-functions-validation-python/actions/workflows/security.yml)
@@ -21,8 +21,6 @@ Validation and serialization for the **Azure Functions Python v2 programming mod
 
 Part of the **Azure Functions Python DX Toolkit**
 → Bring FastAPI-like developer experience to Azure Functions
-
-> **Python 3.10 is deprecated.** Support ends in the next minor release — Python 3.10 reaches end of life in October 2026. Importing the package on Python 3.10 emits a `FutureWarning`; upgrade to Python 3.11 or newer.
 
 ## Why this exists
 
@@ -359,7 +357,7 @@ curl -s "https://<your-app>.azurewebsites.net/api/users" \
 
 > HTTP 400
 
-> Manually verified by maintainers against a temporary Azure Functions deployment (koreacentral, Python 3.12, Consumption plan); response captured and URL anonymized. See [docs/deployment.md](docs/deployment.md#verification-status) for the verification status and context.
+> Manually verified by maintainers against a temporary Azure Functions deployment (koreacentral, Python 3.12, classic Linux Consumption plan — the plan in use at capture time). Response captured and URL anonymized. New deployments should use [Flex Consumption](https://learn.microsoft.com/azure/azure-functions/flex-consumption-plan): Linux Consumption retires on 30 September 2028 and receives no new Python versions. See [docs/deployment.md](docs/deployment.md#verification-status) for the verification status and context.
 
 ## Status codes and controlled errors
 

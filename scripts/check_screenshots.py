@@ -53,7 +53,7 @@ _REQUIRED_CAPTURED = ("package_version", "git_sha", "date", "method")
 # High-signal credential patterns that must never reach a public screenshot or
 # its metadata. The GUID pattern requires dashes at fixed offsets, so 40-hex
 # git SHAs and ``sha256:`` digests in the manifest never match it.
-_SECRET_PATTERNS: tuple[tuple[str, "re.Pattern[str]"], ...] = (
+_SECRET_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
     (
         "subscription-id GUID",
         re.compile(
@@ -66,7 +66,7 @@ _SECRET_PATTERNS: tuple[tuple[str, "re.Pattern[str]"], ...] = (
 )
 
 
-def _iter_strings(obj: Any) -> "list[str]":
+def _iter_strings(obj: Any) -> list[str]:
     if isinstance(obj, str):
         return [obj]
     if isinstance(obj, dict):
@@ -76,7 +76,7 @@ def _iter_strings(obj: Any) -> "list[str]":
     return []
 
 
-def _scan_text(text: str, allow: "set[str]") -> "list[tuple[str, str]]":
+def _scan_text(text: str, allow: set[str]) -> list[tuple[str, str]]:
     findings: list[tuple[str, str]] = []
     for label, pattern in _SECRET_PATTERNS:
         for match in pattern.finditer(text):
@@ -88,8 +88,8 @@ def _scan_text(text: str, allow: "set[str]") -> "list[tuple[str, str]]":
 
 
 def _scan_entry_secrets(
-    entry: dict[str, Any], entry_id: str, image: str | None, allow: "set[str]"
-) -> "list[str]":
+    entry: dict[str, Any], entry_id: str, image: str | None, allow: set[str]
+) -> list[str]:
     """Return leak errors for one entry's text metadata and image bytes."""
     errors: list[str] = []
     for text in _iter_strings(entry):
@@ -113,7 +113,8 @@ def _combined_source_hash(inputs: list[str]) -> str:
 
 
 def _image_hash(rel: str) -> str:
-    return "sha256:" + hashlib.sha256((REPO_ROOT / rel).read_bytes()).hexdigest()
+    with (REPO_ROOT / rel).open("rb") as image:
+        return "sha256:" + hashlib.file_digest(image, "sha256").hexdigest()
 
 
 def _load_manifest(path: Path) -> dict[str, Any]:
@@ -214,6 +215,17 @@ def _check(path: Path, strict: bool) -> int:
                 f"(declared {declared}, actual {actual}); re-capture screenshot "
                 f"and refresh the manifest"
             )
+        output = entry.get("output")
+        image = entry.get("image")
+        if isinstance(output, dict) and isinstance(image, str):
+            declared_output = output.get("hash")
+            actual_output = _image_hash(image)
+            if declared_output != actual_output:
+                warnings.append(
+                    f"{entry_id}: screenshot output changed since capture "
+                    f"(declared {declared_output}, actual {actual_output}); "
+                    "refresh the manifest"
+                )
 
     if hard_errors:
         print("Screenshot manifest check FAILED:")

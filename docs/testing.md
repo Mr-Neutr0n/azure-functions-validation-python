@@ -66,7 +66,7 @@ The `azure-functions-validation` project maintains a high standard of quality th
 
 - **Total Tests**: 145+
 - **Code Coverage**: 99%
-- **Supported Environments**: Python 3.10, 3.11, 3.12, 3.13, and 3.14
+- **Supported Environments**: Python 3.11, 3.12, 3.13, and 3.14
 
 The test suite covers unit tests for individual modules, integration tests with real Azure Function handlers, and smoke tests using the provided examples.
 
@@ -197,7 +197,7 @@ You can view the coverage configuration under the `[tool.coverage.run]` and `[to
 The test suite runs automatically on every pull request and push to the main branch. The CI matrix ensures compatibility across:
 
 - **OS**: `ubuntu-latest`
-- **Python Versions**: 3.10, 3.11, 3.12, 3.13, 3.14
+- **Python Versions**: 3.11, 3.12, 3.13, 3.14
 
 This is managed via the `.github/workflows/ci-test.yml` configuration.
 
@@ -217,8 +217,9 @@ The project includes a real Azure end-to-end test workflow that deploys an actua
 ### Workflow
 
 - **File**: `.github/workflows/e2e-azure.yml`
-- **Trigger**: Tag push (`v*`) or manual (`workflow_dispatch`)
-- **Infrastructure**: Azure Consumption plan, `koreacentral` region
+- **Trigger**: `workflow_call` from `publish-pypi.yml` (certification gates every release, so it always covers the exact commit being published) or manual (`workflow_dispatch`)
+- **Package under test**: the wheel built from the commit under test, pre-installed into `examples/e2e_app/.python_packages/lib/site-packages` and published with `--no-build`. `examples/e2e_app/requirements.txt` is not resolved during certification.
+- **Infrastructure**: classic Linux Consumption plan (`Y1`/Dynamic, see `infra/main.bicep`), `koreacentral` region. Linux Consumption retires 30 September 2028; migrating this harness to [Flex Consumption](https://learn.microsoft.com/azure/azure-functions/flex-consumption-plan) is tracked separately.
 - **Cleanup**: Resource group deleted immediately after tests (`if: always()`)
 
 ### Running E2E Tests
@@ -226,6 +227,10 @@ The project includes a real Azure end-to-end test workflow that deploys an actua
 ```bash
 gh workflow run e2e-azure.yml --ref main
 ```
+
+Optional inputs: `-f ref=<branch|tag|sha>` to certify a specific commit and
+`-f version=<X.Y.Z>` to assert the expected package version (the run fails if it
+does not match `__version__` in the source).
 
 ### Required Secrets & Variables
 

@@ -38,7 +38,7 @@ After this guide, your validation examples are live on Azure and testable with `
 | Azure account | [portal.azure.com](https://portal.azure.com) | [Create free account](https://azure.microsoft.com/free/) |
 | Azure CLI | `az --version` | [Install Azure CLI](https://learn.microsoft.com/cli/azure/install-azure-cli) |
 | Azure Functions Core Tools v4 | `func --version` | [Install Core Tools](https://learn.microsoft.com/azure/azure-functions/functions-run-local#install-the-azure-functions-core-tools) |
-| Python 3.10-3.13 | `python3 --version` | [python.org](https://www.python.org/downloads/) |
+| Python 3.11-3.14 | `python3 --version` | [python.org](https://www.python.org/downloads/) |
 | Validation package installed | `python3 -m pip show azure-functions-validation` | `python3 -m pip install -U azure-functions-validation` |
 | Local app works | `func start` + local `curl` checks | See [`getting-started.md`](./getting-started.md) |
 
@@ -48,8 +48,11 @@ After this guide, your validation examples are live on Azure and testable with `
 
 The request/response behavior documented in this guide and in the project README was
 **manually verified by the maintainers** against a temporary Azure Functions deployment
-(region `koreacentral`, Python 3.12, Consumption plan). Responses were captured and their
-URLs anonymized. This was a one-time manual verification, not a continuously running
+(region `koreacentral`, Python 3.12, classic Linux Consumption plan — the plan in use at
+capture time). Responses were captured and their URLs anonymized. The deployment steps in
+this guide target **Flex Consumption**, which is what new apps should use: Linux
+Consumption retires on 30 September 2028 and will not gain new Python versions
+(3.12 is its last). This was a one-time manual verification, not a continuously running
 environment — the temporary resources were deleted afterward (see
 [Clean up resources](#clean-up-resources)). For ongoing automated verification, the
 [`e2e-azure` workflow](https://github.com/yeongseon/azure-functions-validation-python/blob/main/.github/workflows/e2e-azure.yml) deploys
